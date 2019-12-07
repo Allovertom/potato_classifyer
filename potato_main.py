@@ -9,7 +9,7 @@ import glob
 import pickle
 import shutil
 import random
-
+    
 def Preprocess(i,SaveP):
     size = [28,28]
     array = np.empty([size[0]*size[1],0],int)
@@ -40,31 +40,13 @@ camera = PiCamera()
 camera.resolution = (64,64)
 
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(25, GPIO.OUT)
-GPIO.setup(24, GPIO.OUT)
-GPIO.setup(23, GPIO.OUT)
-GPIO.setup(22, GPIO.OUT)
+GPIO.setup(25, GPIO.OUT)#Reuse
+GPIO.setup(24, GPIO.OUT)#S
+GPIO.setup(23, GPIO.OUT)#M
+GPIO.setup(22, GPIO.OUT)#L
 
-p0 = GPIO.PWM(25, 50)#RH
-p1 = GPIO.PWM(24, 50)#RH
-p2 = GPIO.PWM(23, 50)#LH
-p3 = GPIO.PWM(22, 50)#LH
-
-p0.start(0)
-p1.start(0)
-p2.start(0)
-p3.start(0)
-print("start moving...")
-sleep(10)
 i = 0
-duty = 70
 
-
-#At first go forward
-p0.ChangeDutyCycle(20)
-p1.ChangeDutyCycle(0)
-p2.ChangeDutyCycle(20)
-p3.ChangeDutyCycle(0)
 try:
     while True:
         #Take a pic and save to indicated folder.写真取って指定フォルダに保存
@@ -76,32 +58,25 @@ try:
         pred = clf.predict(X_pred)
         #change duty ratio.デューティー比変更
         if pred[0] == 0:#for clashing. 粉砕に回す芋
-            print("For clashing")
-            p0.ChangeDutyCycle(duty)
-            p1.ChangeDutyCycle(0)
-            p2.ChangeDutyCycle(duty)
-            p3.ChangeDutyCycle(0)
-            sleep(0.8)
+            print("red: For clashing")
+            GPIO.output(25, GPIO.HIGH)
+            sleep(0.3) 
         elif pred[0] == 1:#S size
-            print("S")
-            p0.ChangeDutyCycle(duty-20)
-            p1.ChangeDutyCycle(0)
-            p2.ChangeDutyCycle(0)
-            p3.ChangeDutyCycle(20)
+            print("yellow: S")
+            GPIO.output(24, GPIO.HIGH)
             sleep(0.3)
         elif pred[0] == 2:#M size
-            print("M")
-            p0.ChangeDutyCycle(0)
-            p1.ChangeDutyCycle(20)
-            p2.ChangeDutyCycle(duty-20)
-            p3.ChangeDutyCycle(0)
+            print("blue: M")
+            GPIO.output(23, GPIO.HIGH)
             sleep(0.3)
         elif pred[0]  == 3:#L size
-            p0.ChangeDutyCycle(0)
-            p1.ChangeDutyCycle(duty-10)
-            p2.ChangeDutyCycle(0)
-            p3.ChangeDutyCycle(duty-40)
-            print("L")
+            GPIO.output(22, GPIO.HIGH)
+            sleep(0.3)
+            print("green: L")
+        GPIO.output(25, GPIO.LOW)
+        GPIO.output(24, GPIO.LOW)
+        GPIO.output(23, GPIO.LOW)
+        GPIO.output(22, GPIO.LOW)
         #save preprocessed pic前処理後写真を保存
         if SavePics:
             pass
@@ -113,8 +88,5 @@ try:
 
 except KeyboardInterrupt:
     pass
-
-p0.stop()
-p1.stop()
 GPIO.cleanup()
 
