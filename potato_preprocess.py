@@ -1,4 +1,4 @@
-#from picamera import PiCamera
+from picamera import PiCamera
 from PIL import Image
 import numpy as np
 import glob
@@ -6,28 +6,26 @@ from sklearn import svm, metrics
 from sklearn.model_selection import train_test_split
 import pickle
 
-ModelName = "model.pickle"#As you wish.
+ModelName = "model_1.pickle"#As you wish.
 
 def main():
     Path = '/home/pi/ドキュメント/potato_classfier/train/'
     
-    Reuse_L = glob.glob(Path + '0_reuse/*.jpg')
-    S_L = glob.glob(Path + '1_S/*.jpg')
-    M_L = glob.glob(Path + '2_M/*.jpg')
-    L_L = glob.glob(Path + '3_L/*.jpg')
+    OK_L = glob.glob(Path + '0_OK/*.jpg')
+    NG_L = glob.glob(Path + '1_NG/*.jpg')
+    NoP_L = glob.glob(Path + '3_NoPotato/*.jpg')
     
-    X_R = Preprocess(Reuse_L)
-    Y_R = np.ones(int(len(X_R)/784))#make teach data
-    X_S = Preprocess(S_L)
-    Y_S = np.full(int(len(X_S)/784),2)#make teach data
-    X_M = Preprocess(M_L)
-    Y_M = np.zeros(int(len(X_M)/784))#make teach data
-    X_L = Preprocess(L_L)
-    Y_L = np.full(int(len(X_L)/784),3)#make teach data
+    X_OK = Preprocess(OK_L)
+    Y_OK = np.zeros(int(len(X_OK)/784))#make teach data
+    X_NG = Preprocess(NG_L)
+    Y_NG = np.ones(int(len(X_NG)/784))#make teach data
+    X_NO = Preprocess(NoP_L)
+    Y_NO = np.full(int(len(X_N0)/784),2)#make teach data
     
-    X = np.r_[X_R, X_S, X_M, X_L]#concatinate all preprocessed pics.全前処理写真結合
+    
+    X = np.r_[X_OK, X_NG, X_NO]#concatinate all preprocessed pics.全前処理写真結合
     X = X.reshape([int(len(X)/784),784])#make array.行列化
-    y = np.r_[Y_R, Y_S, Y_M, Y_L]#teacher data addition.教師データ付加
+    y = np.r_[Y_OK, Y_NG]#teacher data addition.教師データ付加
     print(X.shape)
     print(y.shape)
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
@@ -43,7 +41,7 @@ def main():
 
 
 def Preprocess(files):
-    size = [28,28]
+    size = [64, 64]
     array = np.empty([size[0]*size[1],0],int)
     print(array.shape)
     print(files)
@@ -56,6 +54,14 @@ def Preprocess(files):
         array = np.append(array,img_arr.ravel())
         print(array.shape)
     return array
+
+def TakePics():
+    camera = PiCamera()
+    camera.resolution = (64,64)
+    camera.capture('/home/pi/ドキュメント/potato_classfier/predict/%s.jpg' % i)
+    X_pred, img = Preprocess(i, 0)
+    #predictフォルダにあるファイルを前処理（白黒）
+    #trainフォルダに保存
 
 if __name__ == '__main__':
     main()

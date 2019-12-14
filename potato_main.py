@@ -11,7 +11,7 @@ import shutil
 import random
     
 def Preprocess(i,SaveP):
-    size = [28,28]
+    size = [64, 64]
     array = np.empty([size[0]*size[1],0],int)
     print(array.shape)
     FullPath = glob.glob('/home/pi/ドキュメント/potato_classfier/predict/*.jpg')
@@ -40,10 +40,9 @@ camera = PiCamera()
 camera.resolution = (64,64)
 
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(25, GPIO.OUT)#Reuse
-GPIO.setup(24, GPIO.OUT)#S
-GPIO.setup(23, GPIO.OUT)#M
-GPIO.setup(22, GPIO.OUT)#L
+GPIO.setup(25, GPIO.OUT)#0:OK:Green
+GPIO.setup(24, GPIO.OUT)#1:NG(NotGood):Red
+GPIO.setup(23, GPIO.OUT)#2:NoPotato:Yellow
 
 i = 0
 
@@ -57,26 +56,22 @@ try:
         #predict 推定
         pred = clf.predict(X_pred)
         #change duty ratio.デューティー比変更
-        if pred[0] == 0:#for clashing. 粉砕に回す芋
-            print("red: For clashing")
+        if pred[0] == 0:#OK
+            print("Green: OK")
             GPIO.output(25, GPIO.HIGH)
             sleep(0.3) 
-        elif pred[0] == 1:#S size
-            print("yellow: S")
+        elif pred[0] == 1:#NG
+            print("Red: NG")
             GPIO.output(24, GPIO.HIGH)
             sleep(0.3)
-        elif pred[0] == 2:#M size
-            print("blue: M")
+        elif pred[0] == 2:#No Potato
+            print("Yellow: No Potato")
             GPIO.output(23, GPIO.HIGH)
             sleep(0.3)
-        elif pred[0]  == 3:#L size
-            GPIO.output(22, GPIO.HIGH)
-            sleep(0.3)
-            print("green: L")
+
         GPIO.output(25, GPIO.LOW)
         GPIO.output(24, GPIO.LOW)
         GPIO.output(23, GPIO.LOW)
-        GPIO.output(22, GPIO.LOW)
         #save preprocessed pic前処理後写真を保存
         if SavePics:
             pass
