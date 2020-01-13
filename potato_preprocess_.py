@@ -8,6 +8,7 @@ import pickle
 
 ModelName = "model_1.pickle"#As you wish.
 
+
 def main():
     Path = '/home/pi/ドキュメント/potato_classfier/train/'
     
@@ -49,6 +50,7 @@ def Preprocess(files):
         img = Image.open(file).convert('L')
         img = img.resize(size, Image.ANTIALIAS)
         print(img.format, img.size, img.mode,img.getextrema())
+        img.save(file)
         img_arr = np.asarray(img)
         print("OneDimention"+str(img_arr.ravel().shape))
         array = np.append(array,img_arr.ravel())
@@ -64,6 +66,10 @@ def TakePics():
     #trainフォルダに保存
 
 if __name__ == '__main__':
-    main()
+#    main()
+    Path = '/home/pi/ドキュメント/potato_classfier/train/'
+    
+    OK_L = glob.glob(Path + '0_OK/*.jpg')
+    X_OK = Preprocess(OK_L)
 
 

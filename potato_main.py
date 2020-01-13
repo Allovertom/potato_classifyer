@@ -10,6 +10,7 @@ import pickle
 import shutil
 import random
     
+    
 def Preprocess(i,SaveP):
     size = [64, 64]
     array = np.empty([size[0]*size[1],0],int)
