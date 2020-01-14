@@ -1,4 +1,4 @@
-from picamera import PiCamera
+#from picamera import PiCamera
 from PIL import Image
 import numpy as np
 import glob
@@ -56,20 +56,22 @@ def Preprocess(files):
         array = np.append(array,img_arr.ravel())
         print(array.shape)
     return array
-
-def TakePics():
-    camera = PiCamera()
-    camera.resolution = (64,64)
-    camera.capture('/home/pi/ドキュメント/potato_classfier/predict/%s.jpg' % i)
-    X_pred, img = Preprocess(i, 0)
-    #predictフォルダにあるファイルを前処理（白黒）
-    #trainフォルダに保存
+#
+#def TakePics():s
+#    camera = PiCamera()
+#    camera.resolution = (64,64)
+#    camera.capture('/home/pi/ドキュメント/potato_classfier/predict/%s.jpg' % i)
+#    X_pred, img = Preprocess(i, 0)
+#    #predictフォルダにあるファイルを前処理（白黒）
+#    #trainフォルダに保存
 
 if __name__ == '__main__':
 #    main()
-    Path = '/home/pi/ドキュメント/potato_classfier/train/'
+    #Path ='C:/Users/nari/Documents/03_ラズパイ/potato_classifyer/'
     
-    OK_L = glob.glob(Path + '0_OK/*.jpg')
+    #OK_L = glob.glob('0_OK/*.jpg')
+    #X_OK = Preprocess(OK_L)
+    OK_L = glob.glob('1_NG/*.jpg')
     X_OK = Preprocess(OK_L)
 
 
