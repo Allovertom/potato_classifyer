@@ -12,7 +12,6 @@ import random
     
     
     
-def Preprocess(i,SaveP):
     size = [64, 64]
     array = np.empty([size[0]*size[1],0],int)
     print(array.shape)
@@ -32,7 +31,7 @@ def Preprocess(i,SaveP):
     return img_arr.ravel(), img
 
 
-PickleName = "model_1.pickle"#indicate trained model(pickle)
+PickleName = "model_5.pickle"#indicate trained model(pickle)
 SavePics = 0
 with open(PickleName, mode='rb') as fp:
     clf = pickle.load(fp)
@@ -61,15 +60,15 @@ try:
         if pred[0] == 0:#OK
             print("Green: OK")
             GPIO.output(25, GPIO.HIGH)
-            sleep(0.3) 
+            sleep(0.1) 
         elif pred[0] == 1:#NG
             print("Red: NG")
             GPIO.output(24, GPIO.HIGH)
-            sleep(0.3)
+            sleep(0.1)
         elif pred[0] == 2:#No Potato
             print("Yellow: No Potato")
             GPIO.output(23, GPIO.HIGH)
-            sleep(0.3)
+            sleep(0.1)
 
         GPIO.output(25, GPIO.LOW)
         GPIO.output(24, GPIO.LOW)
