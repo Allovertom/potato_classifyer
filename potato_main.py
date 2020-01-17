@@ -11,6 +11,7 @@ import shutil
 import random
     
     
+    
 def Preprocess(i,SaveP):
     size = [64, 64]
     array = np.empty([size[0]*size[1],0],int)
@@ -31,7 +32,7 @@ def Preprocess(i,SaveP):
     return img_arr.ravel(), img
 
 
-PickleName = "model.pickle"#indicate trained model(pickle)
+PickleName = "model_1.pickle"#indicate trained model(pickle)
 SavePics = 0
 with open(PickleName, mode='rb') as fp:
     clf = pickle.load(fp)
