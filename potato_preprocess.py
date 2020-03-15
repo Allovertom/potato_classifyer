@@ -16,7 +16,7 @@ def main():
     
     OK_L = glob.glob(Path + '0_OK/*.jpg')
     NG_L = glob.glob(Path + '1_NG/*.jpg')
-    NoP_L = glob.glob(Path + '3_NoPotato/*.jpg')
+    NoP_L = glob.glob(Path + '2_NoPotato/*.jpg')
     
     X_OK = Preprocess(OK_L)
     Y_OK = np.zeros(int(len(X_OK)/pix))#make teach data
