@@ -6,8 +6,11 @@ class MChange:
         pass
     def learning(self):
         pass
-    def take_pics_and_judge(self):
+    def A_take_pics_and_move(self):
         pass
+    def B_take_pics_and_move(self):
+        pass
+    
     def select_mode(self):
         # ウィンドウを生成してそのウィンドウを操作するための値をrootに代入します。
         root = tk.Tk()
@@ -18,8 +21,10 @@ class MChange:
 
 
         #ボタンの定義
-        ButtonA = tk.Button(root,text="学習モード", command=self.learning, width=12, height=3)
-        ButtonB = tk.Button(root,text="撮影&判定モード", command=self.take_pics_and_judge, width=12, height=3)
+        ButtonA = tk.Button(root,text="A品さつえい", command=self.A_take_pics_and_move, width=12, height=3)
+        ButtonB = tk.Button(root,text="B品さつえい", command=self.B_take_pics_and_move, width=12, height=3)
+        ButtonC = tk.Button(root,text="がくしゅう", command=self.learning, width=12, height=3)
+        
         #ボタンの並びを定義
         ButtonA.grid(row=0, column=0)
         ButtonB.grid(row=0, column=1)
