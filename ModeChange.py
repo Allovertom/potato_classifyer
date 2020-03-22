@@ -12,15 +12,37 @@ class MChange:
         self.txt.delete(0,tk.END)
         self.txt.insert(tk.END,tex)
         print(tex)
-    def take_pics(self):
+    def take_pics_tameshi(self):
         dt_now = datetime.datetime.now().strftime('%Y_%m_%d_%H:%M:%S')
         self.camera.start_preview(fullscreen=False, window=(0, 0, 500, 500))
         sleep(1.7)
         try:
-            self.camera.capture('//home/pi/ドキュメント/potato_classfier/predict/%s.jpg' % dt_now)
+            self.camera.capture("/home/pi/ドキュメント/potato_classfier/tameshi/%s.jpg" % dt_now)
         finally:
             self.camera.stop_preview()
         self.text_print("しゃしんはほぞんされました。")
+    
+    def take_pics_A(self,):
+        dt_now = datetime.datetime.now().strftime('%Y_%m_%d_%H:%M:%S')
+        self.camera.start_preview(fullscreen=False, window=(0, 0, 500, 500))
+        sleep(1.7)
+        try:
+            self.camera.capture("/home/pi/ドキュメント/potato_classfier/train/0_OK/%s.jpg" % dt_now)
+        finally:
+            self.camera.stop_preview()
+        self.text_print("A品しゃしんはほぞんされました。")
+        
+    def take_pics_B(self,):
+        dt_now = datetime.datetime.now().strftime('%Y_%m_%d_%H:%M:%S')
+        self.camera.start_preview(fullscreen=False, window=(0, 0, 500, 500))
+        sleep(1.7)
+        try:
+            self.camera.capture("/home/pi/ドキュメント/potato_classfier/train/1_NG/%s.jpg" % dt_now)
+        finally:
+            self.camera.stop_preview()
+        self.text_print("B品しゃしんはほぞんされました。")   
+    
+    
     def A_take_pics_and_move(self):
         pass
     def B_take_pics_and_move(self):
@@ -38,12 +60,14 @@ class MChange:
         #テキストボックスの定義
         self.txt = tk.Entry(width=50)
         self.txt.place(x=5, y=300)
-
+        
+        #保存先フォルダ
+        #self.Path = '/home/pi/ドキュメント/potato_classfier/train'
 
         #ボタンの定義
-        btnA = tk.Button(root,text="ためしどり", command=self.take_pics, width=12, height=3)
-        btnB = tk.Button(root,text="A品さつえい", command=self.A_take_pics_and_move, width=12, height=3)
-        btnC = tk.Button(root,text="B品さつえい", command=self.B_take_pics_and_move, width=12, height=3)
+        btnA = tk.Button(root,text="ためしどり", command=self.take_pics_tameshi, width=12, height=3)
+        btnB = tk.Button(root,text="A品さつえい", command=self.take_pics_A, width=12, height=3)
+        btnC = tk.Button(root,text="B品さつえい", command=self.take_pics_B, width=12, height=3)
         btnD = tk.Button(root,text="がくしゅう", command=self.learning, width=12, height=3)
         
         #ボタンの並びを定義
