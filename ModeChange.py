@@ -18,6 +18,7 @@ class MChange:
         self.camera.start_preview(fullscreen=False, window=(0, 0, 500, 500))
         sleep(1.7)
         self.camera.stop_preview()
+        
     def text_print(self, tex):
         self.txt.delete(0,tk.END)
         self.txt.insert(tk.END,tex)
@@ -53,10 +54,11 @@ class MChange:
         self.take_pics(2)
     def take_pict_No(self):
         self.take_pics(3)
-    def learning(self):
+    def learning(self, MName = "model.pickle" ):
         self.text_print("がくしゅう中。")
-        dt_now = datetime.datetime.now().strftime('%Y_%m_%d_%H:%M:%S')
-        MName = "model_" + dt_now + ".pickle"
+        #dt_now = datetime.datetime.now().strftime('%Y_%m_%d_%H:%M:%S')
+        #MName = "model_" + dt_now + ".pickle"
+        
         Path = '/home/pi/ドキュメント/potato_classfier/train/'
         pix = 64*64
         
@@ -89,7 +91,8 @@ class MChange:
 
         pre = clf.predict(X_test)#テストデータで確認    
         ac_score = metrics.accuracy_score(y_test, pre)
-        self.text_print(MName + "モデルのせいかいりつは"+str(ac_score)+"です。")#print score.精度表示       
+        ac_score = round(ac_score*100, 1)
+        self.text_print(MName + "のせいかいりつは"+str(ac_score)+"です。")#print score.精度表示       
         with open(MName, mode='wb') as fp:
             pickle.dump(clf, fp)#save model.モデル出力
     def Preprocess(self, files):
