@@ -3,6 +3,12 @@ import tkinter as tk
 from picamera import PiCamera
 from time import sleep
 import datetime
+from PIL import Image
+import numpy as np
+import glob
+from sklearn import svm, metrics
+from sklearn.model_selection import train_test_split
+import pickle
 
 class MChange:
     def __init__(self):
@@ -47,8 +53,55 @@ class MChange:
     def take_pict_No(self):
         self.take_pics(3)
     def learning(self):
-        tex = "がくしゅう中"
-        self.text_print(tex)
+        self.text_print("がくしゅう中。")
+        ModelName = "model.pickle"
+        Path = '/home/pi/ドキュメント/potato_classfier/train/'
+        pix = 64*64
+        
+        OK_L = glob.glob(Path + '0_A/*.jpg')
+        NG_L = glob.glob(Path + '1_B/*.jpg')
+        NoP_L = glob.glob(Path + '2_NoPotato/*.jpg')
+        
+        X_OK = self.Preprocess(OK_L)
+        Y_OK = np.zeros(int(len(X_OK)/pix))#make teach data 0
+        X_NG = self.Preprocess(NG_L)
+        Y_NG = np.ones(int(len(X_NG)/pix))#make teach data 1
+        X_NO = self.Preprocess(NoP_L)
+        Y_NO = np.full(int(len(X_NO)/pix),2)#make teach data 2
+        self.text_print("がくしゅう中。。")
+        
+        X = np.r_[X_OK, X_NG, X_NO]#concatinate all preprocessed pics.全前処理写真結合
+        X = X.reshape([int(len(X)/pix),pix])#make array.行列化
+        y = np.r_[Y_OK, Y_NG, Y_NO]#teacher data addition.教師データ付加
+        print(X.shape)
+        print(y.shape)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
+        self.text_print("がくしゅう中。。。")
+
+        clf = svm.SVC(kernel='linear')#introduce SVM classifier.SVMのオブジェクト化。
+        clf.fit(X_train, y_train)
+        self.text_print("がくしゅうかんりょう。")
+
+        pre = clf.predict(X_test)    
+        ac_score = metrics.accuracy_score(y_test, pre)
+        self.text_print("せいかいりつは"+str(ac_score)+"です。")#print score.精度表示       
+        with open(ModelName, mode='wb') as fp:
+            pickle.dump(clf, fp)#save model.モデル出力
+    def Preprocess(self, files):
+        size = [64, 64]
+        array = np.empty([size[0]*size[1],0],int)
+        print(array.shape)
+        print(files)
+        for i, file in enumerate(files):
+            img = Image.open(file).convert('L')
+            img = img.resize(size, Image.ANTIALIAS)
+            print(img.format, img.size, img.mode,img.getextrema())
+            img_arr = np.asarray(img)
+            print("OneDimention"+str(img_arr.ravel().shape))
+            array = np.append(array,img_arr.ravel())
+            print(array.shape)
+        return array
+ 
     def closeApp(self):
         tex = "終了します"
         self.text_print(tex)
