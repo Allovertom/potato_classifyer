@@ -12,41 +12,37 @@ class MChange:
         self.txt.delete(0,tk.END)
         self.txt.insert(tk.END,tex)
         print(tex)
-    def take_pics_tameshi(self):
-        dt_now = datetime.datetime.now().strftime('%Y_%m_%d_%H:%M:%S')
-        self.camera.start_preview(fullscreen=False, window=(0, 0, 500, 500))
-        sleep(1.7)
-        try:
-            self.camera.capture("/home/pi/ドキュメント/potato_classfier/tameshi/%s.jpg" % dt_now)
-        finally:
-            self.camera.stop_preview()
-        self.text_print("しゃしんはほぞんされました。")
-    
-    def take_pics_A(self,):
-        dt_now = datetime.datetime.now().strftime('%Y_%m_%d_%H:%M:%S')
-        self.camera.start_preview(fullscreen=False, window=(0, 0, 500, 500))
-        sleep(1.7)
-        try:
-            self.camera.capture("/home/pi/ドキュメント/potato_classfier/train/0_OK/%s.jpg" % dt_now)
-        finally:
-            self.camera.stop_preview()
-        self.text_print("A品しゃしんはほぞんされました。")
         
-    def take_pics_B(self,):
+    def take_pics(self, save_f = 0):
         dt_now = datetime.datetime.now().strftime('%Y_%m_%d_%H:%M:%S')
+        path = "/home/pi/ドキュメント/potato_classfier/train/"
+        tex = "しゃしんはほぞんされました。"
+        if save_f == 0:#test
+            path = path + "%s.jpg"
+            tex = "trainフォルダに" + tex
+        elif save_f == 1:#OK
+            path = path + "/0_A/%s.jpg"
+            tex = "A品フォルダに" + tex
+        elif save_f == 2:#NG
+            path = path + "/1_B/%s.jpg"
+            tex = "B品フォルダに" + tex
+        elif save_f == 3:#NoObject
+            path = path + "/2_NoPotato/%s.jpg"
+            tex = "芋なしフォルダに" + tex
+        else:
+            print("please set the number either 0 to 3.")
         self.camera.start_preview(fullscreen=False, window=(0, 0, 500, 500))
         sleep(1.7)
         try:
-            self.camera.capture("/home/pi/ドキュメント/potato_classfier/train/1_NG/%s.jpg" % dt_now)
+            self.camera.capture(path % dt_now)
         finally:
             self.camera.stop_preview()
-        self.text_print("B品しゃしんはほぞんされました。")   
+        self.text_print(tex)
+    def take_pics_A(self):
+        self.take_pics(1)
+    def take_pics_B(self):
+        self.take_pics(2)
     
-    
-    def A_take_pics_and_move(self):
-        pass
-    def B_take_pics_and_move(self):
-        pass
     def learning(self):
         pass
     def select_mode(self):
@@ -65,7 +61,7 @@ class MChange:
         #self.Path = '/home/pi/ドキュメント/potato_classfier/train'
 
         #ボタンの定義
-        btnA = tk.Button(root,text="ためしどり", command=self.take_pics_tameshi, width=12, height=3)
+        btnA = tk.Button(root,text="ためしどり", command=self.take_pics, width=12, height=3)
         btnB = tk.Button(root,text="A品さつえい", command=self.take_pics_A, width=12, height=3)
         btnC = tk.Button(root,text="B品さつえい", command=self.take_pics_B, width=12, height=3)
         btnD = tk.Button(root,text="がくしゅう", command=self.learning, width=12, height=3)
@@ -78,9 +74,6 @@ class MChange:
 
         # ウィンドウを表示して制御するためのループに入ります。
         root.mainloop()
-    def hi():
-        print("hi, there")
-    
 
         
 
