@@ -8,6 +8,9 @@ class MChange:
     def __init__(self):
         self.camera = PiCamera()
         self.camera.resolution = (64,64)
+        self.camera.start_preview(fullscreen=False, window=(0, 0, 500, 500))
+        sleep(1.7)
+        self.camera.stop_preview()
     def text_print(self, tex):
         self.txt.delete(0,tk.END)
         self.txt.insert(tk.END,tex)
@@ -28,11 +31,10 @@ class MChange:
             tex = "B品フォルダに" + tex
         elif save_f == 3:#NoObject
             path = path + "/2_NoPotato/%s.jpg"
-            tex = "芋なしフォルダに" + tex
+            tex = "いもなしフォルダに" + tex
         else:
             print("please set the number either 0 to 3.")
         self.camera.start_preview(fullscreen=False, window=(0, 0, 500, 500))
-        sleep(1.7)
         try:
             self.camera.capture(path % dt_now)
         finally:
@@ -45,7 +47,12 @@ class MChange:
     def take_pict_No(self):
         self.take_pics(3)
     def learning(self):
-        print("がくしゅう中")
+        tex = "がくしゅう中"
+        self.text_print(tex)
+    def closeApp(self):
+        tex = "終了します"
+        self.text_print(tex)
+        self.camera.close()
     def select_mode(self):
         # ウィンドウを生成してそのウィンドウを操作するための値をrootに代入します。
         root = tk.Tk()
@@ -67,6 +74,7 @@ class MChange:
         btnC = tk.Button(root,text="B品さつえい", command=self.take_pics_B, width=12, height=3)
         btnD = tk.Button(root,text="何もないさつえい", command=self.take_pict_No, width=12, height=3)
         btnE = tk.Button(root,text="がくしゅう", command=self.learning, width=12, height=3)
+        btnF = tk.Button(root,text="おわる", command=self.closeApp, width=12, height=3)
         
         #ボタンの並びを定義
         btnA.grid(row=0, column=1)
@@ -74,6 +82,8 @@ class MChange:
         btnC.grid(row=2, column=1)
         btnD.grid(row=3, column=1)
         btnE.grid(row=4, column=1)
+        btnF.grid(row=4, column=2)
+
 
         # ウィンドウを表示して制御するためのループに入ります。
         root.mainloop()
