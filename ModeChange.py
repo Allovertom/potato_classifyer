@@ -18,6 +18,40 @@ class MChange:
         self.camera.start_preview(fullscreen=False, window=(0, 0, 500, 500))
         sleep(1.7)
         self.camera.stop_preview()
+        # ウィンドウを生成してそのウィンドウを操作するための値をrootに代入します。
+        root = tk.Tk()
+        # ウィンドウ名を指定します
+        root.title('選択')
+        # ウィンドウサイズを指定します。('x'は、小文字のエックスです。)
+        root.geometry('400x400')
+        
+        #テキストボックスの定義
+        self.txt = tk.Entry(width=50)
+        self.txt.place(x=5, y=350)
+        
+        #保存先フォルダ
+        #self.Path = '/home/pi/ドキュメント/potato_classfier/train'
+
+        #ボタンの定義
+        btnA = tk.Button(root,text="ためしどり", command=self.take_pics, width=12, height=3)
+        btnB = tk.Button(root,text="A品さつえい", command=self.take_pics_A, width=12, height=3)
+        btnC = tk.Button(root,text="B品さつえい", command=self.take_pics_B, width=12, height=3)
+        btnD = tk.Button(root,text="いもなしさつえい", command=self.take_pict_No, width=12, height=3)
+        btnE = tk.Button(root,text="がくしゅう", command=self.learning, width=12, height=3)
+        btnF = tk.Button(root,text="はんていする", command=self.judge, width=12, height=3)
+        btnG = tk.Button(root,text="ソフトしゅうりょう", command=self.close_app, width=12, height=3)
+        
+        #ボタンの並びを定義
+        btnA.grid(row=0, column=1)
+        btnB.grid(row=1, column=1)
+        btnC.grid(row=2, column=1)
+        btnD.grid(row=3, column=1)
+        btnE.grid(row=4, column=1)
+        btnF.grid(row=1, column=2)
+        btnG.grid(row=4, column=2)
+
+        # ウィンドウを表示して制御するためのループに入ります。
+        root.mainloop()
         
     def text_print(self, tex):
         self.txt.delete(0,tk.END)
@@ -141,48 +175,9 @@ class MChange:
         except KeyboardInterrupt:
             pass
 
-    def closeApp(self):
+    def close_app(self):
         tex = "ソフトをしゅうりょうします。"
         self.text_print(tex)
         self.camera.close()
-    def select_mode(self):
-        # ウィンドウを生成してそのウィンドウを操作するための値をrootに代入します。
-        root = tk.Tk()
-        # ウィンドウ名を指定します
-        root.title('選択')
-        # ウィンドウサイズを指定します。('x'は、小文字のエックスです。)
-        root.geometry('400x400')
-        
-        #テキストボックスの定義
-        self.txt = tk.Entry(width=50)
-        self.txt.place(x=5, y=350)
-        
-        #保存先フォルダ
-        #self.Path = '/home/pi/ドキュメント/potato_classfier/train'
-
-        #ボタンの定義
-        btnA = tk.Button(root,text="ためしどり", command=self.take_pics, width=12, height=3)
-        btnB = tk.Button(root,text="A品さつえい", command=self.take_pics_A, width=12, height=3)
-        btnC = tk.Button(root,text="B品さつえい", command=self.take_pics_B, width=12, height=3)
-        btnD = tk.Button(root,text="いもなしさつえい", command=self.take_pict_No, width=12, height=3)
-        btnE = tk.Button(root,text="がくしゅう", command=self.learning, width=12, height=3)
-        btnF = tk.Button(root,text="はんていする", command=self.judge, width=12, height=3)
-        btnG = tk.Button(root,text="ソフトしゅうりょう", command=self.closeApp, width=12, height=3)
-        
-        
-        #ボタンの並びを定義
-        btnA.grid(row=0, column=1)
-        btnB.grid(row=1, column=1)
-        btnC.grid(row=2, column=1)
-        btnD.grid(row=3, column=1)
-        btnE.grid(row=4, column=1)
-        btnF.grid(row=1, column=2)
-        btnG.grid(row=4, column=2)
-
-
-
-        # ウィンドウを表示して制御するためのループに入ります。
-        root.mainloop()
-
-        
-
+        root.destroy()
+     
