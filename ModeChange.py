@@ -16,40 +16,43 @@ class MChange:
     def __init__(self):
         self.camera = PiCamera()
         self.camera.resolution = (64,64)
-        self.camera.start_preview(fullscreen=False, window=(0, 0, 500, 500))
-        sleep(1.7)
-        self.camera.stop_preview()
+        
+        #プレビュー入れる場合 if display a camera preview.
+        #self.camera.start_preview(fullscreen=False, window=(0, 0, 500, 500))
+        #sleep(1.7)
+        #self.camera.stop_preview()
+        
         # ウィンドウを生成してそのウィンドウを操作するための値をrootに代入します。
         root = tk.Tk()
         # ウィンドウ名を指定します
-        root.title('選択')
+        root.title('おいものきずはんてい君')
         # ウィンドウサイズを指定します。('x'は、小文字のエックスです。)
-        root.geometry('400x400')
+        root.geometry('565x240')
         
         #テキストボックスの定義
-        self.txt = tk.Entry(width=50)
-        self.txt.place(x=5, y=350)
+        self.txt = tk.Entry(width=77)
+        self.txt.place(x=5, y=210)
         
         #保存先フォルダ
         #self.Path = '/home/pi/ドキュメント/potato_classfier/train'
 
         #ボタンの定義
-        btnA = tk.Button(root,text="ためしどり", command=self.take_pics, width=12, height=3)
-        btnB = tk.Button(root,text="A品さつえい", command=self.take_pics_A, width=12, height=3)
-        btnC = tk.Button(root,text="B品さつえい", command=self.take_pics_B, width=12, height=3)
-        btnD = tk.Button(root,text="いもなしさつえい", command=self.take_pict_No, width=12, height=3)
-        btnE = tk.Button(root,text="がくしゅう", command=self.learning, width=12, height=3)
-        btnF = tk.Button(root,text="はんていする", command=self.judge, width=12, height=3)
+        btnA = tk.Button(root,text="0.ためしどり", command=self.take_pics, width=12, height=3)
+        btnB = tk.Button(root,text="1.A品さつえい", command=partial(self.take_pics, 1), width=12, height=3)
+        btnC = tk.Button(root,text="1.B品さつえい", command=partial(self.take_pics, 2), width=12, height=3)
+        btnD = tk.Button(root,text="1.いもなしさつえい", command=partial(self.take_pics, 3), width=12, height=3)
+        btnE = tk.Button(root,text="2.がくしゅう", command=self.learning, width=12, height=3)
+        btnF = tk.Button(root,text="3.はんていする", command=self.judge, width=12, height=3)
         btnG = tk.Button(root,text="ソフトしゅうりょう", command=partial(self.close_app, root), width=12, height=3)
        
         #ボタンの並びを定義
-        btnA.grid(row=0, column=1)
-        btnB.grid(row=1, column=1)
-        btnC.grid(row=2, column=1)
-        btnD.grid(row=3, column=1)
-        btnE.grid(row=4, column=1)
-        btnF.grid(row=1, column=2)
-        btnG.grid(row=4, column=2)
+        btnA.grid(row=1, column=1)
+        btnB.grid(row=0, column=2)
+        btnC.grid(row=1, column=2)
+        btnD.grid(row=2, column=2)
+        btnE.grid(row=1, column=3)
+        btnF.grid(row=1, column=4)
+        btnG.grid(row=1, column=5)
 
         # ウィンドウを表示して制御するためのループに入ります。
         root.mainloop()
@@ -83,12 +86,7 @@ class MChange:
         finally:
             self.camera.stop_preview()
         self.text_print(tex)
-    def take_pics_A(self):
-        self.take_pics(1)
-    def take_pics_B(self):
-        self.take_pics(2)
-    def take_pict_No(self):
-        self.take_pics(3)
+
     def learning(self, MName = "model2.pickle" ):
         self.text_print("がくしゅう中。1ぷん程かかります。")
         #dt_now = datetime.datetime.now().strftime('%Y_%m_%d_%H:%M:%S')
@@ -169,7 +167,7 @@ class MChange:
                 self.text_print("B品です。")
                 sleep(0.1)
             elif pred[0] == 2:#No Potato
-                self.text_print("いもがみつかりません。")
+                self.text_print("いもが見つかりません。")
                 sleep(0.1)
             os.remove(FullPath[0])#remove the pic.判定した写真を削除。 
             
