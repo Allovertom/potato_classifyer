@@ -39,9 +39,9 @@ class MChange:
             tex = "B品フォルダに" + tex
         elif save_f == 3:#NoObject
             path = path + "/2_NoPotato/%s.jpg"
-            tex = "いもなしフォルダに" + tex
+            tex = "いもではないフォルダに" + tex
         else:
-            print("please set the number either 0 to 3.")
+            print("すうちは0〜3のあいだでせっていください。")
         self.camera.start_preview(fullscreen=False, window=(0, 0, 500, 500))
         try:
             self.camera.capture(path % dt_now)
@@ -75,7 +75,7 @@ class MChange:
         Y_NG = np.ones(int(len(X_NG)/pix))#make teach data 1
         X_NO = self.Preprocess(NoP_L)
         Y_NO = np.full(int(len(X_NO)/pix),2)#make teach data 2
-        self.text_print("がくしゅう中。。")
+        self.text_print("がくしゅう中。。。")
         
         X = np.r_[X_OK, X_NG, X_NO]#concatinate all preprocessed pics.全前処理写真結合
         X = X.reshape([int(len(X)/pix),pix])#make array.行列化
@@ -143,7 +143,7 @@ class MChange:
             pass
 
     def closeApp(self):
-        tex = "終了します"
+        tex = "おわります"
         self.text_print(tex)
         self.camera.close()
     def select_mode(self):
@@ -165,7 +165,7 @@ class MChange:
         btnA = tk.Button(root,text="ためしどり", command=self.take_pics, width=12, height=3)
         btnB = tk.Button(root,text="A品さつえい", command=self.take_pics_A, width=12, height=3)
         btnC = tk.Button(root,text="B品さつえい", command=self.take_pics_B, width=12, height=3)
-        btnD = tk.Button(root,text="何もないさつえい", command=self.take_pict_No, width=12, height=3)
+        btnD = tk.Button(root,text="いもないじょうたいさつえい", command=self.take_pict_No, width=12, height=3)
         btnE = tk.Button(root,text="がくしゅう", command=self.learning, width=12, height=3)
         btnF = tk.Button(root,text="はんていする", command=self.judge, width=12, height=3)
         btnG = tk.Button(root,text="おわる", command=self.closeApp, width=12, height=3)
