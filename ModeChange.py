@@ -54,8 +54,8 @@ class MChange:
         self.take_pics(2)
     def take_pict_No(self):
         self.take_pics(3)
-    def learning(self, MName = "model.pickle" ):
-        self.text_print("がくしゅう中。")
+    def learning(self, MName = "model2.pickle" ):
+        self.text_print("がくしゅう中。1ぷん程かかります。")
         #dt_now = datetime.datetime.now().strftime('%Y_%m_%d_%H:%M:%S')
         #MName = "model_" + dt_now + ".pickle"
         
@@ -75,7 +75,7 @@ class MChange:
         Y_NG = np.ones(int(len(X_NG)/pix))#make teach data 1
         X_NO = self.Preprocess(NoP_L)
         Y_NO = np.full(int(len(X_NO)/pix),2)#make teach data 2
-        self.text_print("がくしゅう中。。。")
+        self.text_print("がくしゅう中。。")
         
         X = np.r_[X_OK, X_NG, X_NO]#concatinate all preprocessed pics.全前処理写真結合
         X = X.reshape([int(len(X)/pix),pix])#make array.行列化
@@ -121,29 +121,28 @@ class MChange:
         with open(PickleName, mode='rb') as fp:
             clf = pickle.load(fp)
         try:
-            while True:
-                #Take a pic and save to the predict folder.写真取ってpredictフォルダに保存
-                self.camera.capture('/home/pi/ドキュメント/potato_classfier/predict/1.jpg')
-                #preprocessing at indicated folder.指定フォルダの写真を前処理
-                X_pred = self.Preprocess(FullPath)
-                #predict 推定
-                pred = clf.predict(X_pred)
-                if pred[0] == 0:#OK
-                    self.text_print("A品です。")
-                    sleep(0.1) 
-                elif pred[0] == 1:#NG
-                    self.text_print("B品です。")
-                    sleep(0.1)
-                elif pred[0] == 2:#No Potato
-                    self.text_print("いもがみつかりません。")
-                    sleep(0.1)
-                os.remove(FullPath[0])#remove the pic.判定した写真を削除。
-
+            #Take a pic and save to the predict folder.写真取ってpredictフォルダに保存
+            self.camera.capture('/home/pi/ドキュメント/potato_classfier/predict/1.jpg')
+            #preprocessing at indicated folder.指定フォルダの写真を前処理
+            X_pred = self.Preprocess(FullPath)
+            #predict 推定
+            pred = clf.predict(X_pred)
+            if pred[0] == 0:#OK
+                self.text_print("A品です。")
+                sleep(0.1) 
+            elif pred[0] == 1:#NG
+                self.text_print("B品です。")
+                sleep(0.1)
+            elif pred[0] == 2:#No Potato
+                self.text_print("いもがみつかりません。")
+                sleep(0.1)
+            os.remove(FullPath[0])#remove the pic.判定した写真を削除。 
+            
         except KeyboardInterrupt:
             pass
 
     def closeApp(self):
-        tex = "おわります"
+        tex = "ソフトをしゅうりょうします。"
         self.text_print(tex)
         self.camera.close()
     def select_mode(self):
@@ -165,10 +164,10 @@ class MChange:
         btnA = tk.Button(root,text="ためしどり", command=self.take_pics, width=12, height=3)
         btnB = tk.Button(root,text="A品さつえい", command=self.take_pics_A, width=12, height=3)
         btnC = tk.Button(root,text="B品さつえい", command=self.take_pics_B, width=12, height=3)
-        btnD = tk.Button(root,text="いもないじょうたいさつえい", command=self.take_pict_No, width=12, height=3)
+        btnD = tk.Button(root,text="いもなしさつえい", command=self.take_pict_No, width=12, height=3)
         btnE = tk.Button(root,text="がくしゅう", command=self.learning, width=12, height=3)
         btnF = tk.Button(root,text="はんていする", command=self.judge, width=12, height=3)
-        btnG = tk.Button(root,text="おわる", command=self.closeApp, width=12, height=3)
+        btnG = tk.Button(root,text="ソフトしゅうりょう", command=self.closeApp, width=12, height=3)
         
         
         #ボタンの並びを定義
