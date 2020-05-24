@@ -10,6 +10,7 @@ from sklearn import svm, metrics
 from sklearn.model_selection import train_test_split
 import pickle
 import os
+from functools import partial
 
 class MChange:
     def __init__(self):
@@ -39,8 +40,8 @@ class MChange:
         btnD = tk.Button(root,text="いもなしさつえい", command=self.take_pict_No, width=12, height=3)
         btnE = tk.Button(root,text="がくしゅう", command=self.learning, width=12, height=3)
         btnF = tk.Button(root,text="はんていする", command=self.judge, width=12, height=3)
-        btnG = tk.Button(root,text="ソフトしゅうりょう", command=self.close_app, width=12, height=3)
-        
+        btnG = tk.Button(root,text="ソフトしゅうりょう", command=partial(self.close_app, root), width=12, height=3)
+       
         #ボタンの並びを定義
         btnA.grid(row=0, column=1)
         btnB.grid(row=1, column=1)
@@ -175,9 +176,10 @@ class MChange:
         except KeyboardInterrupt:
             pass
 
-    def close_app(self):
+    def close_app(self, root):
         tex = "ソフトをしゅうりょうします。"
         self.text_print(tex)
         self.camera.close()
         root.destroy()
+
      
