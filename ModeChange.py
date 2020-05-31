@@ -144,7 +144,7 @@ class MChange:
             if os.path.isfile(p):
                 os.remove(p)
     
-    def judge(self, ModelFullName="model.pickle"):
+    def judge(self, ModelFullName="model2.pickle"):
         PickleName = ModelFullName#indicate trained model(pickle)
         FullPath = ['/home/pi/ドキュメント/potato_classfier/predict/1.jpg']
         #delete all jpg files in predict folder. predictフォルダ内のjpgファイル削除。
@@ -153,6 +153,7 @@ class MChange:
         #print(FullPath)
         with open(PickleName, mode='rb') as fp:
             clf = pickle.load(fp)
+        self.camera.start_preview(fullscreen=False, window=(0, 0, 500, 500))
         try:
             #Take a pic and save to the predict folder.写真取ってpredictフォルダに保存
             self.camera.capture('/home/pi/ドキュメント/potato_classfier/predict/1.jpg')
@@ -173,6 +174,8 @@ class MChange:
             
         except KeyboardInterrupt:
             pass
+        finally:
+            self.camera.stop_preview()
 
     def close_app(self, root):
         tex = "ソフトをしゅうりょうします。"
